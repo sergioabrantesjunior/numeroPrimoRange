@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2162
+# Prove: NumeroPrimoRange
+# Descricao Curta: Encontra números primos num range
+# Descrição Longa: Encontra números primos num range informado.
+#				   Ao final mostra o total de números encontrados
+# Frequencia: Sob demanda
+# Autor: Sérgio Abrantes
+# Contato: sergioabrantes@gmail.com
+# Site: https://github.com/sergioabrantesjunior/numeroPrimoRange
+#
+#
+# Histórico:
+#
+#    v1.0.0 2019-01-01, Sérgio Abrantes:
+#       - Versão inicial do script
+
+: '
+Conceito básico: o número primo é um número que é divisível somente por 1 e por ele mesmo.
+Caso possua mais divisores, não é número primo, mas sim número composto.
+Exemplos:
+
+1) 2 tem apenas os divisores 1 e 2, portanto 2 é um número primo (único primo par).
+2) 17 tem apenas os divisores 1 e 17, portanto 17 é um número primo.
+3) 10 tem os divisores 1, 2, 5 e 10, portanto 10 não é um número primo.
+'
+
+clear
+read -p "Será analisado número primo do 1 até: " range
+contaPrimos=0
+
+for ((numeroAnalisado=1;numeroAnalisado<=range;numeroAnalisado++));do
+
+	: '
+	Abaixo testamos as segiuntes condições:
+	1) Número é 2
+	2) Número é diferente de 1 (já que é sempre será primo) e ímpar
+	Satisfazendo essas condições, continua a análise.
+	'
+
+	if [ "$numeroAnalisado" = 2 ] || [[ "$numeroAnalisado" != 1  &&  "$(( numeroAnalisado % 2 ))" = 1 ]];then
+		primo=1
+		
+		: '
+		Como todo número divisível por 1 é primo e divisor 2 já foi testado acima, 
+		iniciamos os próximos testes a partir do divisor 3 até o ( $número / 2) 
+		mais da metade dele não será e se for ímpar, condição testada acima.
+		'
+		
+		contadorLoop=3
+		while [[ "$contadorLoop" -lt "$(( numeroAnalisado / 2 ))" && "$primo" = 1 ]];do
+			if [ "$(( numeroAnalisado % contadorLoop ))" = 0 ];then
+				primo=0
+				break
+			fi
+			contadorLoop=$(( contadorLoop + 1 ))
+		done
+
+		if [ "$primo" = 1 ];then
+			echo "Encontrato o número primo: $numeroAnalisado"
+			contaPrimos=$(( contaPrimos + 1 ))
+		fi					
+	fi
+done
+
+echo "Encontrado $contaPrimos números primos de 1 até $range"
